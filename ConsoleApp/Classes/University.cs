@@ -33,9 +33,49 @@ namespace ConsoleAppPR5.Classes
             student.SignUpForACourse(course);
             course.Students.Add(student);
         }
-        public string GetStudnetsTable()
+        public string GetStudnetsTableString()
         {
-            return String.Empty;
+            string format = "|{0,-15}|{1,-10}|{2,-10}|{3,-40}|\n";
+            string line = "--------------------------------------------------------------------------------\n";
+
+            string table = line + Student.GetTitleColumnString(format) + line;
+            if (_allStudents.Count > 0)
+            {
+                foreach (var student in _allStudents)
+                {
+                    table += student.GetInfoString(format);
+                }
+            }
+            else
+            {
+                table += String.Format(format, "", "", "", "");
+            }
+
+            table += line;
+
+            return table;
+        }
+        public string GetTutorTableString()
+        {
+            string format = "|{0,-15}|{1,-10}|{2,-10}|{3,-40}|\n";
+            string line = "--------------------------------------------------------------------------------\n";
+
+            string table = line + Student.GetTitleColumnString(format) + line;
+            if (_allTutors.Count > 0)
+            {
+                foreach (var tutor in _allTutors)
+                {
+                    table += tutor.GetInfoString(format);
+                }
+            }
+            else
+            {
+                table += String.Format(format, "", "", "", "");
+            }
+
+            table += line;
+
+            return table;
         }
     }
 }
