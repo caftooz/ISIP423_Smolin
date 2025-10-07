@@ -1,6 +1,6 @@
-﻿namespace ConsoleApp
+﻿namespace ConsoleAppPR5
 {
-    internal class Program
+    internal class ConsoleMenu
     {
         static void Main(string[] args)
         {
