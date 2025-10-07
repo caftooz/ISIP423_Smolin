@@ -10,6 +10,23 @@ namespace ConsoleAppPR5.Classes
         private string _name;
         private int _maxStudents;
 
-        private List<Student> _students;
+        public List<Student> Students { get; private set; }
+        public Course(Tutor tutor, string name, int maxStudents)
+        {
+            _tutor = tutor;
+            _name = name;
+            _maxStudents = maxStudents;
+
+            Students = new();
+        }
+
+        public string GetName()
+        {
+            return _name;
+        }
+        public string GetInfoString()
+        {
+            return $"{_name}\t{Students.Count}/{_maxStudents}\t{_tutor.GetInitialsString()}";
+        }
     }
 }
