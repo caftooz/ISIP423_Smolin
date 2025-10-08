@@ -35,8 +35,8 @@ namespace ConsoleAppPR5.Classes
         }
         public string GetStudnetsTableString()
         {
-            string format = "|{0,-15}|{1,-10}|{2,-10}|{3,-40}|\n";
-            string line = "--------------------------------------------------------------------------------\n";
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
+            string line = "-------------------------------------------------------------------------------------\n";
 
             string table = line + Student.GetTitleColumnString(format) + line;
             if (_allStudents.Count > 0)
@@ -55,17 +55,39 @@ namespace ConsoleAppPR5.Classes
 
             return table;
         }
-        public string GetTutorTableString()
+        public string GetTutorsTableString()
         {
-            string format = "|{0,-15}|{1,-10}|{2,-10}|{3,-40}|\n";
-            string line = "--------------------------------------------------------------------------------\n";
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
+            string line = "-------------------------------------------------------------------------------------\n";
 
-            string table = line + Student.GetTitleColumnString(format) + line;
+            string table = line + Tutor.GetTitleColumnString(format) + line;
             if (_allTutors.Count > 0)
             {
                 foreach (var tutor in _allTutors)
                 {
                     table += tutor.GetInfoString(format);
+                }
+            }
+            else
+            {
+                table += String.Format(format, "", "", "", "");
+            }
+
+            table += line;
+
+            return table;
+        }
+        public string GetCoursesTableString()
+        {
+            string format = "|{0,-4}|{1,-40}|{2,-15}|{3,-10}|\n";
+            string line = "--------------------------------------------------------------------------\n";
+
+            string table = line + Course.GetTitleColumnString(format) + line;
+            if (_allCourses.Count > 0)
+            {
+                foreach (var course in _allCourses)
+                {
+                    table += course.GetInfoString(format);
                 }
             }
             else

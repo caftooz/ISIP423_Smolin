@@ -8,11 +8,16 @@ namespace ConsoleAppPR5.Classes
 {
     internal class Tutor : Person
     {
-        public Tutor(string name, string surname, string? middleName, int age, Gender gender) : base (name, surname, middleName, age, gender)
+        private static int _lastId = 1;
+        public int ID { get; private set; }
+        public List<Course> Courses { get; private set; }
+        public Tutor(string name, string surname, string? middleName, int age, Gender gender) : base(name, surname, middleName, age, gender)
         {
             Courses = new();
+
+            ID = _lastId;
+            _lastId++;
         }
-        public List<Course> Courses { get; private set; }
 
         public string GetInfoString(string format)
         {
@@ -24,13 +29,13 @@ namespace ConsoleAppPR5.Classes
 
             string[] personInfoStringArray = GetPersonInfoStringArray();
 
-            return String.Format(format, personInfoStringArray[0], personInfoStringArray[1], personInfoStringArray[2], coursesStr);
+            return String.Format(format, ID,personInfoStringArray[0], personInfoStringArray[1], personInfoStringArray[2], coursesStr);
         }
         public static string GetTitleColumnString(string format)
         {
             string[] personTitleColumnStringArray = GetPersonTitleColumnStringArray();
 
-            return String.Format(format, personTitleColumnStringArray[0], personTitleColumnStringArray[1], personTitleColumnStringArray[2], "ведёт курсы");
+            return String.Format(format, "ID",personTitleColumnStringArray[0], personTitleColumnStringArray[1], personTitleColumnStringArray[2], "ведёт курсы");
         }
     }
 }

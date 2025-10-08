@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace ConsoleAppPR5.Classes
@@ -8,37 +9,119 @@ namespace ConsoleAppPR5.Classes
     {
         private University _university;
 
-        public UniversityConcolseMenu()
+        public UniversityConcolseMenu(University university)
         {
-            _university = new();
+            _university = university;
         }
-        public void ShowMenu()
+        public void ReShowMenu()
         {
-            switch (PrintChooseMenu("Вывести всех студентов", "Вывести всех преподавателей", "Вывести все курсы"))
+            Console.Clear();
+
+            switch (PrintAndChooseMenu("Студенты", "Преподаватели", "Курсы"))
             {
                 case ConsoleKey.D1:
+                    ShowStudents();
                     break;
                 case ConsoleKey.D2:
+                    ShowTutors();
                     break;
                 case ConsoleKey.D3:
+                    ShowCourses();
                     break;
-                case ConsoleKey.D4:
+            }
+
+            Console.ReadKey(true);
+        }
+
+        private void ShowStudents()
+        {
+            string table = _university.GetStudnetsTableString();
+            Console.WriteLine(table);
+
+            switch (PrintAndChooseMenu("Выбрать", "Добавить нового"))
+            {
+                case ConsoleKey.D1:
+                    {
+                        Console.WriteLine("Введите ID студента для выбора: ");
+                        int id = int.Parse(Console.ReadLine());
+                        ChooseStudent(id);
+                    }
                     break;
-                case ConsoleKey.D5:
-                    break;
-                default:
+                case ConsoleKey.D2:
+                    AddStudent();
                     break;
             }
         }
 
-        private ConsoleKey PrintChooseMenu(params string[] menuItem)
+        private void ShowTutors()
+        {
+            string table = _university.GetTutorsTableString();
+            Console.WriteLine(table);
+
+            switch (PrintAndChooseMenu("Выбрать", "Добавить нового"))
+            {
+                case ConsoleKey.D1:
+                    {
+                        Console.WriteLine("Введите ID преподавателя для выбора: ");
+                        int id = int.Parse(Console.ReadLine());
+                        ChooseTutor(id);
+                    }
+                    break;
+                case ConsoleKey.D2:
+                    AddTutor();
+                    break;
+            }
+        }
+        private void ShowCourses()
+        {
+            string table = _university.GetCoursesTableString();
+            Console.WriteLine(table);
+
+            switch (PrintAndChooseMenu("Выбрать", "Добавить новый"))
+            {
+                case ConsoleKey.D1:
+                    {
+                        Console.WriteLine("Введите ID курса для выбора: ");
+                        int id = int.Parse(Console.ReadLine());
+                        ChooseCourse(id);
+                    }
+                    break;
+                case ConsoleKey.D2:
+                    AddCourse();
+                    break;
+            }
+        }
+        private void ChooseStudent(int id)
+        {
+        }
+        private void ChooseTutor(int id)
+        {
+        }
+        private void ChooseCourse(int id)
+        {
+        }
+        private void AddStudent()
+        {
+        }
+        private void AddTutor()
+        {
+        }
+        private void AddCourse()
+        {
+        }
+
+
+        private ConsoleKey PrintAndChooseMenu(params string[] menuItem)
+        {
+            PrintChooseMenu(menuItem);
+
+            ConsoleKey key = ChooseMenu(menuItem);
+
+            return key;
+        }
+        private void PrintChooseMenu(params string[] menuItem)
         {
             int count = menuItem.Length;
-
-            if (count <= 1)
-                return default;
-            if (count > 10)
-                return default;
 
             string menu = "";
             for (int i = 0; i < count; i++)
@@ -53,6 +136,14 @@ namespace ConsoleAppPR5.Classes
                 }
             }
             Console.WriteLine(menu);
+        }
+        private ConsoleKey ChooseMenu(params string[] menuItem)
+        {
+            int count = menuItem.Length;
+
+            if (count <= 1 || count > 10)
+                throw new Exception("Неверный список меню");
+
             while (true)
             {
                 switch (Console.ReadKey(true).Key)

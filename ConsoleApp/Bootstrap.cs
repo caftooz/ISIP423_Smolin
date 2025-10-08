@@ -7,32 +7,38 @@ namespace ConsoleAppPR5
     {
         static void Main(string[] args)
         {
-            UniversityConcolseMenu consoleMenu = new();
-            consoleMenu.ShowMenu();
+            University KIP_FIN = new();
+            UniversityConcolseMenu consoleMenu = new(KIP_FIN);
 
-            //University un = new();
+            InitializeUniversity(KIP_FIN);
 
-            //string format = "|{0,-15}|{1,-10}|{2,-10}|{3,-40}|";
-            //string line = "--------------------------------------------------------------------------------";
+            while (true)
+            {
+                consoleMenu.ReShowMenu();
+            }
+        }
 
-            //Student studnet = new("Александр", "Смолин", "Сергеевич", 17, Gender.Male);
-            //Student studnet1 = new("Артемий", "Резанцев", "Павлович", 18, Gender.Male);
+        private static void InitializeUniversity(University university)
+        {
+            //Студенты
+            Student studnet1 = new("Александр", "Смолин", "Сергеевич", 17, Gender.Male);
+            Student studnet2 = new("Артемий", "Резанцев", "Павлович", 18, Gender.Male);
 
-            //Tutor tutor = new("Максим", "Гордов", "Олегович", 64, Gender.Male);
+            university.AddStudent(studnet1);
+            university.AddStudent(studnet2);
 
-            //Course course = new(tutor, "Разработка программных модулей", 30);
+            //Преподаватели
+            Tutor tutor1 = new("Максим", "Гордов", "Олегович", 64, Gender.Male);
 
-            //un.SingUpStudentForCourse(studnet, course);
+            university.AddTutor(tutor1);
 
+            //Курсы
+            Course course1 = new(tutor1, "Разработка программных модулей", 30);
 
+            university.AddCourse(course1);
+
+            //Запись на курсы
+            university.SingUpStudentForCourse(studnet1, course1);
         }
     }
 }
-
-
-
-
-
-// Просматривать информацию о всех студентах/преподавателей/курсах
-
-// Студенты могут записываться на курсы

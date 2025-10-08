@@ -6,6 +6,9 @@ namespace ConsoleAppPR5.Classes
 {
     internal class Course
     {
+        private static int _lastId = 1;
+        public int ID { get; private set; }
+
         private Tutor _tutor;
         private string _name;
         private int _maxStudents;
@@ -17,6 +20,9 @@ namespace ConsoleAppPR5.Classes
             _name = name;
             _maxStudents = maxStudents;
 
+            ID = _lastId;
+            _lastId++;
+
             Students = new();
         }
 
@@ -24,9 +30,13 @@ namespace ConsoleAppPR5.Classes
         {
             return _name;
         }
-        public string GetInfoString()
+        public string GetInfoString(string format)
         {
-            return $"{_name}\t{Students.Count}/{_maxStudents}\t{_tutor.GetInitialsString()}";
+            return String.Format(format, ID,_name, _tutor.GetInitialsString(), $"{Students.Count}/{_maxStudents}");
+        }
+        public static string GetTitleColumnString(string format)
+        {
+            return String.Format(format, "ID", "название", "преподаватель", "студенты");
         }
     }
 }
