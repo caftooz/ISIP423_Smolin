@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ConsoleAppPR5.Classes
@@ -27,6 +28,18 @@ namespace ConsoleAppPR5.Classes
         public void AddCourse(Course course)
         {
             _allCourses.Add(course);
+        }
+        public void RemoveStudent(Student student)
+        {
+            _allStudents.Remove(student);
+        }
+        public void RemoveTutor(Tutor tutor)
+        {
+            _allTutors.Remove(tutor);
+        }
+        public void RemoveCourse(Course course)
+        {
+            _allCourses.Remove(course);
         }
         public void SingUpStudentForCourse(Student student, Course course)
         {
@@ -98,6 +111,19 @@ namespace ConsoleAppPR5.Classes
             table += line;
 
             return table;
+        }
+
+        public Student GetStudent(Func<Student,bool> condition)
+        {
+            return _allStudents.First(condition);
+        }
+        public Tutor GetTutor(Func<Tutor, bool> condition)
+        {
+            return _allTutors.First(condition);
+        }
+        public Course GetCourse(Func<Course, bool> condition)
+        {
+            return _allCourses.First(condition);
         }
     }
 }

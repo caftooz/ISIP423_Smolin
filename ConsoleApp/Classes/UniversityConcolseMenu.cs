@@ -35,10 +35,11 @@ namespace ConsoleAppPR5.Classes
 
         private void ShowStudents()
         {
+            Console.Clear();
             string table = _university.GetStudnetsTableString();
             Console.WriteLine(table);
 
-            switch (PrintAndChooseMenu("Выбрать", "Добавить нового"))
+            switch (PrintAndChooseMenu("Выбрать", "Добавить нового", "Выход"))
             {
                 case ConsoleKey.D1:
                     {
@@ -50,15 +51,17 @@ namespace ConsoleAppPR5.Classes
                 case ConsoleKey.D2:
                     AddStudent();
                     break;
+                case ConsoleKey.D3:
+                    break;
             }
         }
-
         private void ShowTutors()
         {
+            Console.Clear();
             string table = _university.GetTutorsTableString();
             Console.WriteLine(table);
 
-            switch (PrintAndChooseMenu("Выбрать", "Добавить нового"))
+            switch (PrintAndChooseMenu("Выбрать", "Добавить нового", "Выход"))
             {
                 case ConsoleKey.D1:
                     {
@@ -70,14 +73,17 @@ namespace ConsoleAppPR5.Classes
                 case ConsoleKey.D2:
                     AddTutor();
                     break;
+                case ConsoleKey.D3:
+                    break;
             }
         }
         private void ShowCourses()
         {
+            Console.Clear();
             string table = _university.GetCoursesTableString();
             Console.WriteLine(table);
 
-            switch (PrintAndChooseMenu("Выбрать", "Добавить новый"))
+            switch (PrintAndChooseMenu("Выбрать", "Добавить новый", "Выход"))
             {
                 case ConsoleKey.D1:
                     {
@@ -89,16 +95,49 @@ namespace ConsoleAppPR5.Classes
                 case ConsoleKey.D2:
                     AddCourse();
                     break;
+                case ConsoleKey.D3:
+                    break;
             }
         }
+
         private void ChooseStudent(int id)
         {
+            Console.Clear();
+            Student student = _university.GetStudent(s => s.ID == id);
+
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
+            string line = "-------------------------------------------------------------------------------------\n";
+
+            Console.WriteLine(line + Student.GetTitleColumnString(format) + line + student.GetInfoString(format) + line);
+
+            switch (PrintAndChooseMenu("Удалить", "Назначить на курс"))
+            {
+                case ConsoleKey.D1:
+                    _university.RemoveStudent(student);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"студент {student.GetInitialsString()} удалён!!!");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+                case ConsoleKey.D2:
+                    Console.Clear();
+                    Console.WriteLine(_university.GetCoursesTableString());
+                    Console.WriteLine($"Введите ID курса для записи студента \"{student.GetInitialsString()}\": ");
+                    int courseId = int.Parse(Console.ReadLine());
+                    Course course = _university.GetCourse(c => c.ID == courseId);
+                    _university.SingUpStudentForCourse(student, course);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n{student.GetInitialsString()} успешно записан на курс \"{course.GetName()}\"");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+            }
         }
         private void ChooseTutor(int id)
         {
+            Tutor tutor = _university.GetTutor(t => t.ID == id);
         }
         private void ChooseCourse(int id)
         {
+            Course course = _university.GetCourse(c => c.ID == id);
         }
         private void AddStudent()
         {
