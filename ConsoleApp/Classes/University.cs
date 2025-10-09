@@ -48,8 +48,8 @@ namespace ConsoleAppPR5.Classes
         }
         public string GetStudnetsTableString()
         {
-            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
-            string line = "-------------------------------------------------------------------------------------\n";
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-50}|\n";
+            string line = "-----------------------------------------------------------------------------------------------\n";
 
             string table = line + Student.GetTitleColumnString(format) + line;
             if (_allStudents.Count > 0)

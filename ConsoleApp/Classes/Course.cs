@@ -24,6 +24,7 @@ namespace ConsoleAppPR5.Classes
             _lastId++;
 
             Students = new();
+            tutor.Courses.Add(this);
         }
 
         public string GetName()

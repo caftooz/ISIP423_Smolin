@@ -106,8 +106,8 @@ namespace ConsoleAppPR5.Classes
             Console.Clear();
             Student student = _university.GetStudent(s => s.ID == id);
 
-            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
-            string line = "-------------------------------------------------------------------------------------\n";
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-50}|\n";
+            string line = "-----------------------------------------------------------------------------------------------\n";
 
             Console.WriteLine(line + Student.GetTitleColumnString(format) + line + student.GetInfoString(format) + line);
 
@@ -179,8 +179,8 @@ namespace ConsoleAppPR5.Classes
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Студент усешно добавлен!\n");
             Console.ForegroundColor = ConsoleColor.Gray;
-            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
-            string line = "-------------------------------------------------------------------------------------\n";
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-50}|\n";
+            string line = "-----------------------------------------------------------------------------------------------\n";
 
             Console.WriteLine(line + Student.GetTitleColumnString(format) + line + student.GetInfoString(format) + line);
 
