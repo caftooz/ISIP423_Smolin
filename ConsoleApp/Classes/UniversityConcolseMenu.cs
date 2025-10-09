@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleAppPR5.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -61,11 +62,11 @@ namespace ConsoleAppPR5.Classes
             string table = _university.GetTutorsTableString();
             Console.WriteLine(table);
 
-            switch (PrintAndChooseMenu("Выбрать", "Добавить нового", "Выход"))
+            switch (PrintAndChooseMenu("Выбрать для удаления", "Добавить нового", "Выход"))
             {
                 case ConsoleKey.D1:
                     {
-                        Console.WriteLine("Введите ID преподавателя для выбора: ");
+                        Console.WriteLine("Введите ID преподавателя для удаления: ");
                         int id = int.Parse(Console.ReadLine());
                         ChooseTutor(id);
                     }
@@ -83,11 +84,11 @@ namespace ConsoleAppPR5.Classes
             string table = _university.GetCoursesTableString();
             Console.WriteLine(table);
 
-            switch (PrintAndChooseMenu("Выбрать", "Добавить новый", "Выход"))
+            switch (PrintAndChooseMenu("Выбрать для удаления", "Добавить новый", "Выход"))
             {
                 case ConsoleKey.D1:
                     {
-                        Console.WriteLine("Введите ID курса для выбора: ");
+                        Console.WriteLine("Введите ID курса для удаления: ");
                         int id = int.Parse(Console.ReadLine());
                         ChooseCourse(id);
                     }
@@ -110,7 +111,7 @@ namespace ConsoleAppPR5.Classes
 
             Console.WriteLine(line + Student.GetTitleColumnString(format) + line + student.GetInfoString(format) + line);
 
-            switch (PrintAndChooseMenu("Удалить", "Назначить на курс"))
+            switch (PrintAndChooseMenu("Удалить", "Записать на курс"))
             {
                 case ConsoleKey.D1:
                     _university.RemoveStudent(student);
@@ -134,19 +135,117 @@ namespace ConsoleAppPR5.Classes
         private void ChooseTutor(int id)
         {
             Tutor tutor = _university.GetTutor(t => t.ID == id);
+
+            _university.RemoveTutor(tutor);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Преподаватель {tutor.GetInitialsString()} удалён!!!");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
         private void ChooseCourse(int id)
         {
             Course course = _university.GetCourse(c => c.ID == id);
+
+            _university.RemoveCourse(course);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Курс \"{course.GetName()}\" удалён!!!");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
         private void AddStudent()
         {
+            Console.Clear();
+            Console.Write("Введите имя студента: ");
+            string name = Console.ReadLine();
+            Console.Write("Введите фамилию студента: ");
+            string surname = Console.ReadLine();
+            Console.Write("Введите отчество студента: ");
+            string middle = Console.ReadLine();
+            Console.Write("Введите возраст студента: ");
+            string age = Console.ReadLine();
+            Console.WriteLine("Выберите пол студента: ");
+            Gender gender = default;
+            switch (PrintAndChooseMenu("Мужчина", "Женщина"))
+            {
+                case ConsoleKey.D1:
+                    gender = Gender.Male;
+                    break;
+                case ConsoleKey.D2:
+                    gender = Gender.Female;
+                    break;
+            }
+
+            Student student = new(name, surname, middle, int.Parse(age), gender);
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Студент усешно добавлен!\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
+            string line = "-------------------------------------------------------------------------------------\n";
+
+            Console.WriteLine(line + Student.GetTitleColumnString(format) + line + student.GetInfoString(format) + line);
+
+            _university.AddStudent(student);
+
         }
         private void AddTutor()
         {
+            Console.Clear();
+            Console.Write("Введите имя преподавателя: ");
+            string name = Console.ReadLine();
+            Console.Write("Введите фамилию преподавателя: ");
+            string surname = Console.ReadLine();
+            Console.Write("Введите отчество преподавателя: ");
+            string middle = Console.ReadLine();
+            Console.Write("Введите возраст преподавателя: ");
+            string age = Console.ReadLine();
+            Console.WriteLine("Выберите пол преподавателя: ");
+            Gender gender = default;
+            switch (PrintAndChooseMenu("Мужчина", "Женщина"))
+            {
+                case ConsoleKey.D1:
+                    gender = Gender.Male;
+                    break;
+                case ConsoleKey.D2:
+                    gender = Gender.Female;
+                    break;
+            }
+
+            Tutor tutor = new(name, surname, middle, int.Parse(age), gender);
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Преподаватель усешно добавлен!\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            string format = "|{0,-4}|{1,-15}|{2,-10}|{3,-10}|{4,-40}|\n";
+            string line = "-------------------------------------------------------------------------------------\n";
+
+            Console.WriteLine(line + Tutor.GetTitleColumnString(format) + line + tutor.GetInfoString(format) + line);
+
+            _university.AddTutor(tutor);
         }
         private void AddCourse()
         {
+            Console.Clear();
+            Console.Write("Введите название курса: ");
+            string name = Console.ReadLine();
+
+            string table = _university.GetTutorsTableString();
+            Console.WriteLine(table);
+
+            Console.WriteLine("Введите ID преподавателя для назначения на курс: ");
+            int id = int.Parse(Console.ReadLine());
+
+            Tutor tutor = _university.GetTutor(t => t.ID == id);
+
+            Console.Write("Введите максимальное количество студентов на курс: ");
+            string maxStudents = Console.ReadLine();
+
+            Course course = new(tutor, name, int.Parse(maxStudents));
+            _university.AddCourse(course);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Курс усешно добавлен!\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
 
