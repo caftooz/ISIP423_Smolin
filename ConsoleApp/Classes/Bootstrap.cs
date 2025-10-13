@@ -1,6 +1,6 @@
-﻿namespace ConsoleApp
+﻿namespace ConsoleApp.Classes
 {
-    internal class Program
+    internal class Bootstrap
     {
         static void Main(string[] args)
         {
