@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApp.Classes.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
