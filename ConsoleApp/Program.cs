@@ -116,7 +116,7 @@ void battle(Enemy enemy)
 void main()
 {
     Console.WriteLine("SUPERGAME");
-    Console.WriteLine("Выберите уровень сложности 1-начальный 2-средний 3-сложный");
+    Console.WriteLine("Выберите уровень сложности  1-начальный 2-средний 3-сложный");
     string difficult = Console.ReadLine();
     switch (difficult)
     {
