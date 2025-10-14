@@ -46,7 +46,7 @@ void get_tools()
             }
             break;
         case 2:
-            Console.WriteLine("Вам выпал новая броня, экипировать? (1-да,  0-нет)");
+            Console.WriteLine("Вам выпал новая броня, экипировать? (1-да, 0-нет)");
             double n_def = r.NextDouble() * 5 + r.NextDouble() * 2 + r.NextDouble() + r.NextDouble();
             player.Stats_d(n_def);
             string s_ = Console.ReadLine();
