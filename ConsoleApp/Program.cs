@@ -43,7 +43,7 @@ namespace ConsoleApp
             }
         }
 
-        private Dictionary<Part, int> _parts = new();
+        private Dictionary<Part, int> _складкакойто = new();
 
         public CarService(decimal наДонат = 30000, int cvvКодМоейКартыЭто830 = 5)
         {
@@ -55,13 +55,13 @@ namespace ConsoleApp
                 int index = п三曰出回.Next(0, _allParts行行.Count);
                 Part randomPart = _allParts行行[index];
 
-                if (_parts.ContainsKey(randomPart))
+                if (_складкакойто.ContainsKey(randomPart))
                 {
-                    _parts[randomPart] += 1;
+                    _складкакойто[randomPart] += 1;
                 }
                 else
                 {
-                    _parts.Add(randomPart, 1);
+                    _складкакойто.Add(randomPart, 1);
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace ConsoleApp
             string titleString = String.Format("|{0, 6}|{1, -40}|", "Кол-во", "Название");
             Console.WriteLine(titleString);
             Console.WriteLine("-------------------------------------------------");
-            foreach (var part in _parts)
+            foreach (var part in _складкакойто)
             {
                 if (part.Value > 0)
                 {
@@ -158,13 +158,13 @@ namespace ConsoleApp
 
             чипсыЛэйс_скрабом_ -= partCount * partFind.Price;
 
-            if (_parts.ContainsKey(partFind))
+            if (_складкакойто.ContainsKey(partFind))
             {
-                _parts[partFind] += partCount;
+                _складкакойто[partFind] += partCount;
             }
             else
             {
-                _parts.Add(partFind, partCount);
+                _складкакойто.Add(partFind, partCount);
             }
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
@@ -261,14 +261,38 @@ namespace ConsoleApp
 
         private void ЗаказПринят(Part 影)
         {
-            if (_parts.ContainsKey(影) && _parts[影] > ЧтояНаделалОНетТОлькоНеЭта228ООО) 
+            Console.WriteLine("\nИщем деталь...");
+            Thread.Sleep(1000);
+            if (_складкакойто.ContainsKey(影) && _складкакойто[影] > ЧтояНаделалОНетТОлькоНеЭта228ООО)
             {
-
+                Console.WriteLine("\nВы отыскали нужную деталь на складе");
+                Thread.Sleep(300);
+                Console.WriteLine("Вы поставили нужную деталь");
+                Thread.Sleep(300);
+                Console.WriteLine("Клиент ушёл довольный, оплатив вашу работу");
+                Console.WriteLine("Бюджет +3000, и оплатили деталь: " + 影.Price);
+                Console.WriteLine("\nИТОГ:");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("-" + 影.Name);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("+" + (3000 + 影.Price));
+                Console.ResetColor();
+                чипсыЛэйс_скрабом_ += 3000 + 影.Price;
+                _складкакойто[影] --;
             }
             else
             {
+                Console.WriteLine("\nДетали на складе не оказалось");
+                Thread.Sleep(300);
+                Console.WriteLine("Но вы не отчаялись");
+                Thread.Sleep(300);
+                Console.WriteLine("Клиент ничего не заметит");
+                Thread.Sleep(300);
+                Console.WriteLine("Вы поставили случайную деталь");
+
 
             }
+            _выполненоЗаказовайайай++;
         }
     }
 }
