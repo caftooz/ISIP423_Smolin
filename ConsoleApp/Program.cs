@@ -47,6 +47,10 @@ namespace ConsoleApp
 
         public CarService(decimal наДонат = 30000, int cvvКодМоейКартыЭто830 = 5)
         {
+            Core.Context.PurchaseOrders.RemoveRange(Core.Context.PurchaseOrders.ToArray());
+            Core.Context.ServiceOrders.RemoveRange(Core.Context.ServiceOrders.ToArray());
+
+
             чипсыЛэйс_скрабом_ = 30000;
 
             // Добавляем случайные предметы на склад
@@ -158,14 +162,6 @@ namespace ConsoleApp
 
             чипсыЛэйс_скрабом_ -= partCount * partFind.Price;
 
-            if (_складкакойто.ContainsKey(partFind))
-            {
-                _складкакойто[partFind] += partCount;
-            }
-            else
-            {
-                _складкакойто.Add(partFind, partCount);
-            }
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
             {
@@ -243,7 +239,7 @@ namespace ConsoleApp
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.D1:
-                        ЗаказПринят(brokenPart);
+                        ЗаказПринят(brokenPart, покупатьWW);
                         break;
                     case ConsoleKey.D2:
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -256,10 +252,65 @@ namespace ConsoleApp
                 }
                 break;
             }
+
             Console.ReadKey();
+            Console.Clear();
+            ПроверитьПоступлениеТоваров();
         }
 
-        private void ЗаказПринят(Part 影)
+        private void ПроверитьПоступлениеТоваров()
+        {
+            Console.WriteLine("Заказов пройдено: " + _выполненоЗаказовайайай);
+            List<PurchaseOrder> purchaseOrders = Core.Context.PurchaseOrders.ToList();
+
+            Console.WriteLine("\nДЕТАЛИ ПРИВЕЗЁННЫЕ СЕГОДНЯ:");
+            string titleString2 = String.Format("| {0, 6} | {1, 40} |", "Кол-во", "Название детали");
+            Console.WriteLine("-----------------------------------------------------");
+            Console.WriteLine(titleString2);
+            Console.WriteLine("-----------------------------------------------------");
+            foreach (var purchaseOrder in purchaseOrders)
+            {
+                if (purchaseOrder.DeliveryDueCarCount <= 0)
+                {
+                    string orderString2 = String.Format("| {0, 6} | {1, 40} |", purchaseOrder.Quantity, purchaseOrder.Part.Name);
+                    Console.WriteLine(orderString2);
+                    if (_складкакойто.ContainsKey(purchaseOrder.Part))
+                    {
+                        _складкакойто[purchaseOrder.Part] += purchaseOrder.Quantity;
+                    }
+                    else
+                    {
+                        _складкакойто.Add(purchaseOrder.Part, purchaseOrder.Quantity);
+                    }
+                    Core.Context.PurchaseOrders.Remove(purchaseOrder);
+                }
+            }
+            Console.WriteLine("-----------------------------------------------------");
+
+            Console.WriteLine("\nДЕТАЛИ В ПУТИ:");
+            string titleString = String.Format("| {0,15} | {1, 6} | {2, 40} |", "Приедет через", "Кол-во", "Название детали");
+            Console.WriteLine("-----------------------------------------------------------------------");
+            Console.WriteLine(titleString);
+            Console.WriteLine("-----------------------------------------------------------------------");
+
+            foreach (var purchaseOrder in purchaseOrders)
+            {
+                if (purchaseOrder.DeliveryDueCarCount > 0)
+                {
+                    string orderString = String.Format("| {0,15} | {1, 6} | {2, 40} |", purchaseOrder.DeliveryDueCarCount, purchaseOrder.Quantity, purchaseOrder.Part.Name);
+                    Console.WriteLine(orderString);
+                    purchaseOrder.DeliveryDueCarCount -= 1;
+                }
+            }
+            Console.WriteLine("-----------------------------------------------------------------------");
+
+
+            Core.Context.SaveChanges();
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        private void ЗаказПринят(Part 影, Customer c)
         {
             Console.WriteLine("\nИщем деталь...");
             Thread.Sleep(1000);
@@ -270,7 +321,7 @@ namespace ConsoleApp
                 Console.WriteLine("Вы поставили нужную деталь");
                 Thread.Sleep(300);
                 Console.WriteLine("Клиент ушёл довольный, оплатив вашу работу");
-                Console.WriteLine("Бюджет +3000, и оплатили деталь: " + 影.Price);
+                Console.WriteLine("Оплата труда +3000, Оплата детали: +" + 影.Price);
                 Console.WriteLine("\nИТОГ:");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("-" + 影.Name);
@@ -279,19 +330,54 @@ namespace ConsoleApp
                 Console.ResetColor();
                 чипсыЛэйс_скрабом_ += 3000 + 影.Price;
                 _складкакойто[影] --;
+
+                ServiceOrder serviceOrder = new()
+                {
+                    CustomerId = c.CustomerId,
+                    BrokenPartId = 影.PartId,
+                    Status = "Успешно",
+                    Revenue = 3000,
+                    CreatedAt = DateTime.Now,
+                };
+                Core.Context.ServiceOrders.Add(serviceOrder);
             }
             else
             {
+                Part randomPart = null;
+                while (!(randomPart != null && _складкакойто.ContainsKey(randomPart) && _складкакойто[randomPart] > 0))
+                {
+                    int index = п三曰出回.Next(0, _allParts行行.Count);
+                    randomPart = _allParts行行[index];
+                }
+                _складкакойто[randomPart] -= 1;
+
                 Console.WriteLine("\nДетали на складе не оказалось");
                 Thread.Sleep(300);
                 Console.WriteLine("Но вы не отчаялись");
                 Thread.Sleep(300);
                 Console.WriteLine("Клиент ничего не заметит");
                 Thread.Sleep(300);
-                Console.WriteLine("Вы поставили случайную деталь");
+                Console.WriteLine("Вы поставили случайную деталь: " + randomPart.Name);
+                Thread.Sleep(1000);
+                Console.WriteLine("Клиент остался недовольным");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n-2500 руб.");
+                Console.ResetColor();
+                чипсыЛэйс_скрабом_ -= 2500;
+
+                ServiceOrder serviceOrder = new()
+                {
+                    CustomerId = c.CustomerId,
+                    BrokenPartId = randomPart.PartId,
+                    Status = "Провалено",
+                    Revenue = -2500,
+                    CreatedAt = DateTime.Now,
+                };
+                Core.Context.ServiceOrders.Add(serviceOrder);
 
 
             }
+            Core.Context.SaveChanges();
             _выполненоЗаказовайайай++;
         }
     }
