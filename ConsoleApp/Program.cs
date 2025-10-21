@@ -7,7 +7,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("АВТОСЕРВИС (игра)");
+            Console.WriteLine("АВТОСЕРВИС (-игра-)");
             Thread.Sleep(1000);
             Console.Clear();
 
