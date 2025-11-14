@@ -11,15 +11,15 @@ namespace ConsoleApp
             Thread.Sleep(1000);
             Console.Clear();
 
-            CarService ГордыеМашиныСервис = new CarService();
+            СервисАвто24на7 ГордыеМашиныСервис = new ();
             ГордыеМашиныСервис.НачатьСмену();
         }
     }
 
-    internal class CarService
+    internal class СервисАвто24на7
     {
         public int ЧтояНаделалОНетТОлькоНеЭта228ООО = 0;
-        private List<Part> _allParts行行 = Core.Context.Parts.ToList();
+        private List<Part> _allParts = Core.Context.Parts.ToList();
         private int _выполненоЗаказовайайай = 0;
 
         private Random п三曰出回 = new();
@@ -45,7 +45,7 @@ namespace ConsoleApp
 
         private Dictionary<Part, int> _складкакойто = new();
 
-        public CarService(decimal наДонат = 30000, int cvvКодМоейКартыЭто830 = 5)
+        public СервисАвто24на7(decimal наДонат = 30000, int cvvКодМоейКартыЭто830 = 5)
         {
             Core.Context.PurchaseOrders.RemoveRange(Core.Context.PurchaseOrders.ToArray());
             Core.Context.ServiceOrders.RemoveRange(Core.Context.ServiceOrders.ToArray());
@@ -56,16 +56,16 @@ namespace ConsoleApp
             // Добавляем случайные предметы на склад
             for (int i = 0; i < cvvКодМоейКартыЭто830; i++)
             {
-                int index = п三曰出回.Next(0, _allParts行行.Count);
-                Part randomPart = _allParts行行[index];
+                int index = п三曰出回.Next(0, _allParts.Count);
+                Part авав = _allParts[index];
 
-                if (_складкакойто.ContainsKey(randomPart))
+                if (_складкакойто.ContainsKey(авав))
                 {
-                    _складкакойто[randomPart] += 1;
+                    _складкакойто[авав] += 1;
                 }
                 else
                 {
-                    _складкакойто.Add(randomPart, 1);
+                    _складкакойто.Add(авав, 1);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace ConsoleApp
             string titleString = String.Format("| {0, 2} | {1, -10} | {2, -40} |", "ID","Цена (руб.)", "Название");
             Console.WriteLine(titleString);
             Console.WriteLine("--------------------------------------------------------------");
-            foreach (var part in _allParts行行)
+            foreach (var part in _allParts)
             {
                 
                 string partString = String.Format("| {0, 2} | {1, -10} | {2, -40} |", part.PartId, part.Price, part.Name);
@@ -114,7 +114,7 @@ namespace ConsoleApp
             while (true)
             {
                 string idString = Console.ReadLine();
-                if (int.TryParse(idString, out var id) && _allParts行行.Any(p => p.PartId == id))
+                if (int.TryParse(idString, out var id) && _allParts.Any(p => p.PartId == id))
                 {
                     partId = id;
                     break;
@@ -128,7 +128,7 @@ namespace ConsoleApp
                 }
             }
 
-            Part partFind = _allParts行行.FirstOrDefault(p => p.PartId == partId);
+            Part partFind = _allParts.FirstOrDefault(p => p.PartId == partId);
             int maxOrderCount = Convert.ToInt32(чипсыЛэйс_скрабом_ / partFind.Price);
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -209,14 +209,13 @@ namespace ConsoleApp
                 }
             }
         }
-
         private void ЖдатьКлиента()
         {
             int randomCustomerIndex = п三曰出回.Next(0, Core.Context.Customers.ToList().Count);
             Customer покупатьWW = Core.Context.Customers.ToList()[randomCustomerIndex];
 
-            int randomPartIndex = п三曰出回.Next(0, _allParts行行.Count);
-            Part brokenPart = _allParts行行[randomPartIndex];
+            int randomPartIndex = п三曰出回.Next(0, _allParts.Count);
+            Part brokenPart = _allParts[randomPartIndex];
             Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.Red;
@@ -257,7 +256,6 @@ namespace ConsoleApp
             Console.Clear();
             ПроверитьПоступлениеТоваров();
         }
-
         private void ПроверитьПоступлениеТоваров()
         {
             Console.WriteLine("Заказов пройдено: " + _выполненоЗаказовайайай);
@@ -309,7 +307,6 @@ namespace ConsoleApp
             Console.ReadKey();
             Console.Clear();
         }
-
         private void ЗаказПринят(Part 影, Customer c)
         {
             Console.WriteLine("\nИщем деталь...");
@@ -346,8 +343,8 @@ namespace ConsoleApp
                 Part randomPart = null;
                 while (!(randomPart != null && _складкакойто.ContainsKey(randomPart) && _складкакойто[randomPart] > 0))
                 {
-                    int index = п三曰出回.Next(0, _allParts行行.Count);
-                    randomPart = _allParts行行[index];
+                    int index = п三曰出回.Next(0, _allParts.Count);
+                    randomPart = _allParts[index];
                 }
                 _складкакойто[randomPart] -= 1;
 
