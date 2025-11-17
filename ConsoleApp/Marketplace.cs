@@ -206,8 +206,9 @@ namespace ConsoleApp
                 switch (Menu.Input(1, true))
                 {
                     case Menu.Numbers.D1:
-                        if(_isAnonymous) continue;
-                        break;
+                        if (_isAnonymous) continue;
+                        else AddProductToCart(product);
+                            break;
                     case Menu.Numbers.D0:
                         return;
                 }
@@ -220,6 +221,58 @@ namespace ConsoleApp
         private void CartPage()
         {
 
+        }
+        private void AddProductToCart(Product product)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"В наличии: {product.StockQuantity}");
+                Console.WriteLine("Введите количество товра для добавления (введите 0, если не хотите): ");
+                string countStr = Console.ReadLine();
+                if (int.TryParse(countStr, out int count))
+                {
+                    if (count == 0) return;
+                    if (count <= 1)
+                    {
+                        Console.WriteLine("\nОшибка добавления в корзину!!");
+                        Console.WriteLine("Число не может быть отрицательным.");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    else if (count >= product.StockQuantity)
+                    {
+                        Console.WriteLine("\nОшибка добавления в корзину!!");
+                        Console.WriteLine("Вы хотите добавить больше, чем есть на складе.");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    else
+                    {
+                        CartItem productItem = new CartItem()
+                        {
+                            Product = product,
+                            Quantity = count,
+                            User = _user,
+                            AddedAt = DateTime.Now
+                        };
+
+                        Core.Context.CartItems.Add(productItem);
+                        Core.Context.SaveChanges();
+
+                        Console.WriteLine("Товар успешно добавлен в корзину!!");
+                        Console.ReadKey();
+                        break;
+                    }
+                    
+                }
+                else
+                {
+                    Console.WriteLine("\nОшибка добавления в корзину!!");
+                    Console.WriteLine("Вы должны ввести число.");
+                    Console.ReadKey();
+                }
+            }
         }
         private void UserPage()
         {
