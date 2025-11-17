@@ -4,7 +4,7 @@ namespace ConsoleApp
 {
     internal class Marketplace
     {
-        private const string NAME = "GMWOG||GG.MOW||WONGG";
+        private const string MARKETPLACE_NAME = "GMWOG||GG.MOW||WONGG";
         private User _user = null;
         private bool _isAnonymous => _user == null;
         public void Start()
@@ -16,6 +16,8 @@ namespace ConsoleApp
         }
         private bool MainPage()
         {
+            Console.WriteLine("ДОБРО ПОЖАЛОВАТЬ В " + MARKETPLACE_NAME);
+            Console.WriteLine("");
             if (_isAnonymous)
             {
                 Menu.Write("Войти", "Зарегестрироваться", "Посмотреть товары");
@@ -40,7 +42,7 @@ namespace ConsoleApp
             {
                 Console.WriteLine($"Вы вошли как {_user.FirstName} {_user.LastName}\n");
                 Menu.Write("Профиль", "Предыдущие заказы", "Корзина");
-                Console.WriteLine("\n4. Товары");
+                Console.WriteLine("\n4. Посмотреть товары");
                 Console.WriteLine("\n0. Выход");
 
                 switch (Menu.Input(4, true))
@@ -190,7 +192,7 @@ namespace ConsoleApp
                 Console.ResetColor();
                 Console.WriteLine(product.StockQuantity);
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\nКатегория");
+                Console.WriteLine("\nКатегория: ");
                 Console.ResetColor();
                 Console.WriteLine(Core.Context.Categories.First(c => c.CategoryId == product.CategoryId).Name);
 
@@ -221,7 +223,15 @@ namespace ConsoleApp
         }
         private void UserPage()
         {
+            Console.WriteLine("==ПРОФИЛЬ==\n");
+            Console.WriteLine($"Имя: {_user.FirstName}");
+            Console.WriteLine($"Фамиляи: {_user.LastName}");
+            Console.WriteLine($"Логин: {_user.Username}");
+            Console.WriteLine($"Почта: {_user.Email}");
+            Console.WriteLine($"Аккаунт создан: {_user.CreatedAt}");
 
+            Console.WriteLine("\nнажмите любую клавишу для выхода");
+            Console.ReadKey(true);
         }
         private void WriteProducts(int page, List<Product> products)
         {
@@ -236,7 +246,34 @@ namespace ConsoleApp
         }
         private void SignInPage()
         {
-            Console.WriteLine("==ВХОД==");
+            Console.WriteLine("==ВХОД==\n");
+            Console.Write("Логин: ");
+            string username = Console.ReadLine();
+            Console.Write("Пароль: ");
+            string password = Console.ReadLine();
+
+            User user = Core.Context.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ОШИБКА ВХОДА!!");
+                Console.ResetColor();
+                Console.WriteLine("Пользователь с таким логином не найден!");
+            } 
+            else if (user.Password != password)
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ОШИБКА ВХОДА!!");
+                Console.ResetColor();
+                Console.WriteLine("Неверный пароль!");
+            }
+            else
+            {
+                _user = user;
+            }
         }
         private void SignUpPage()
         {
