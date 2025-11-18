@@ -1,5 +1,6 @@
 ﻿using Azure;
 using ConsoleApp.DB;
+using System.Drawing;
 
 namespace ConsoleApp
 {
@@ -52,7 +53,7 @@ namespace ConsoleApp
                         UserPage();
                         break;
                     case Menu.Numbers.D2:
-                        OrdersPage();
+                        OrdersHistoryPage();
                         break;
                     case Menu.Numbers.D3:
                         CartPage();
@@ -215,7 +216,7 @@ namespace ConsoleApp
                 }
             }
         }
-        private void OrdersPage()
+        private void OrdersHistoryPage()
         {
 
         }
@@ -237,6 +238,7 @@ namespace ConsoleApp
                     Console.Clear();
                     Console.WriteLine("==КОРЗИНА==\n");
 
+                    Console.WriteLine($"\n--СТРАНИЦА {pageNumber}--");
                     WriteCartItems(pageNumber, cartItems);
 
                     if (pageNumber > 1)
@@ -282,7 +284,8 @@ namespace ConsoleApp
                                 pageNumber++;
                             break;
                         case Menu.Numbers.D9:
-                            break;
+                            OrderPage(cartItems);
+                            return;
                         case Menu.Numbers.D0:
                             return;
                     }
@@ -332,9 +335,181 @@ namespace ConsoleApp
 
         private void OrderPage(params List<CartItem> items)
         {
+            int pageNumber = 1;
+            while (true)
+            {
+                int maxPageNumber = Convert.ToInt32(Math.Ceiling(items.Count / 6f));
+                Console.Clear();
+                Console.WriteLine("==ПОКУПКА ТОВАРОВ==");
 
+                Console.WriteLine($"\n--СТРАНИЦА {pageNumber}--");
+                WriteOrderItems(pageNumber, items);
+
+                if (pageNumber > 1)
+                    Console.WriteLine("\n7. Предыдущая страница");
+                else
+                    Console.WriteLine("\n");
+
+                if (pageNumber < maxPageNumber)
+                    Console.WriteLine("8. Следующая страница");
+                else
+                    Console.WriteLine("");
+
+                decimal totalAmount = 0;
+                foreach (CartItem item in items)
+                {
+                    totalAmount += item.Quantity * Core.Context.Products.First(p => p.ProductId == item.ProductId).Price;
+                }
+                Console.WriteLine("\nИтоговая стоимость: " + totalAmount);
+                Console.WriteLine("9. Продолжить оформление заказа");
+                Console.WriteLine("\n0. Выход");
+
+                switch (Menu.Input(9, true))
+                {
+                    case Menu.Numbers.D1:
+                    case Menu.Numbers.D2:
+                    case Menu.Numbers.D3:
+                    case Menu.Numbers.D4:
+                    case Menu.Numbers.D5:
+                    case Menu.Numbers.D6:
+                        break;
+                    case Menu.Numbers.D7:
+                        if (pageNumber > 1)
+                            pageNumber--;
+                        break;
+                    case Menu.Numbers.D8:
+                        if (pageNumber < maxPageNumber)
+                            pageNumber++;
+                        break;
+                    case Menu.Numbers.D9:
+                        {
+                            ExecuteOrder(totalAmount, items);
+                        }
+                        return;
+                    case Menu.Numbers.D0:
+                        return;
+                }
+            }
         }
+        private void ExecuteOrder(decimal totalAmount, params List<CartItem> items)
+        {
+            PickupPoint point = null;
+            while (true)
+            {
+                Console.WriteLine("1. Выбрать ПВЗ");
+                Console.WriteLine("Выбранный ПВЗ: ");
+                Console.WriteLine("Авдрес: " + (point?.Addres ?? "ПВЗ не выбран"));
+                Console.WriteLine("Телефон: " + (point?.PhoneNumber ?? "ПВЗ не выбран"));
 
+                Console.WriteLine("\nИтоговая сумма: " + totalAmount);
+                if (point == null)
+                {
+                    Console.WriteLine("Чтобы оформить заказ выберите ПВЗ!");
+                }
+                else
+                {
+                    Console.WriteLine("2. Оформить заказ");
+                }
+                switch (Menu.Input(1, true))
+                {
+                    case Menu.Numbers.D0:
+                        return;
+                    case Menu.Numbers.D1:
+                        point = ChoosePointPage();
+                        break;
+                    case Menu.Numbers.D2:
+                        if (point != null)
+                        {
+                            CalculateOrder(totalAmount, point, items);
+                            return;
+                        }
+                        else
+                            break;
+                }
+            }
+        }
+        private void CalculateOrder(decimal totalAmount, PickupPoint point, params List<CartItem> items)
+        {
+            Order newOrder = new Order()
+            {
+                UserId = _user.UserId,
+                PointId = point.PointId,
+                TotalAmount = totalAmount,
+                CreatedAt = DateTime.Now
+            };
+            Core.Context.Orders.Add(newOrder);
+
+            foreach (CartItem item in items)
+            {
+                OrderItem newOrderItem = new OrderItem()
+                {
+                    OrderId = newOrder.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = Core.Context.Products.First(p => p.ProductId == item.ProductId).Price
+                };
+                Core.Context.OrderItems.Add(newOrderItem);
+                Core.Context.CartItems.Remove(item);
+            }
+
+            Core.Context.SaveChanges();
+
+            Console.WriteLine("Заказ успешно оформлен!!");
+            Console.ReadKey(true);
+        }
+        private PickupPoint ChoosePointPage()
+        {
+            List<PickupPoint> points = Core.Context.PickupPoints.ToList();
+            Console.WriteLine("ВЫБОР ПВЗ\n");
+            int i = 1;
+            foreach (PickupPoint point in points)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("");
+                Console.WriteLine(i + ". " + point.Addres);
+                Console.ResetColor();
+                Console.WriteLine(point.PhoneNumber);
+                i++;
+            }
+
+            switch (Menu.Input(points.Count + 1))
+            {
+                case Menu.Numbers.D1:
+                    return points[1];
+                case Menu.Numbers.D2:
+                    return points[2];
+                case Menu.Numbers.D3:
+                    return points[3];
+                case Menu.Numbers.D4:
+                    return points[4];
+                case Menu.Numbers.D5:
+                    return points[5];
+                case Menu.Numbers.D6:
+                    return points[6];
+                case Menu.Numbers.D7:
+                    return points[7];
+                case Menu.Numbers.D8:
+                    return points[8];
+                case Menu.Numbers.D9:
+                    return points[9];
+            }
+
+            return null;
+        }
+        private void WriteOrderItems(int page, List<CartItem> cartItems)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i + (page - 1) * 6 < cartItems.Count)
+                {
+                    CartItem item = cartItems[i + (page - 1) * 6];
+                    Product product = Core.Context.Products.First(p => p.ProductId == item.ProductId);
+                    Console.WriteLine($"{product.Name} - ({product.Price} руб. x {item.Quantity} шт.) = {product.Price * item.Quantity} руб.");
+                }
+                else
+                    Console.WriteLine("");
+            }
+        }
         private void WriteCartItems(int page, List<CartItem> cartItems)
         {
             for (int i = 0; i < 6; i++)
