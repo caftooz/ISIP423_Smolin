@@ -294,6 +294,9 @@ namespace ConsoleApp
                 Console.Clear();
                 Console.WriteLine($"==ЗАКАЗ ОТ {order.CreatedAt}==");
                 Console.WriteLine($"Итоговая сумма заказа: {order.TotalAmount}");
+                PickupPoint point = Core.Context.PickupPoints.First(p => p.PointId == order.PointId);
+                Console.WriteLine($"Адресс ПВЗ: {point.Addres}");
+                Console.WriteLine($"Адресс ПВЗ: {point.PhoneNumber}");
 
                 List<OrderItem> items = Core.Context.OrderItems.Where(o => o.OrderId == order.OrderId).ToList();
 
