@@ -227,7 +227,8 @@ namespace ConsoleApp
                 List<Order> orders = Core.Context.Orders.Where(o => o.UserId == _user.UserId).ToList();
                 if (orders == null || orders.Count <= 0)
                 {
-                    Console.WriteLine("Вы не совершили ни одногозаказа!");
+                    Console.WriteLine("Вы не совершили ни одного заказа!");
+                    Console.WriteLine("\nнажмите любую клавишу для выхода");
                     Console.ReadKey(true);
                     return;
                 }
@@ -510,7 +511,7 @@ namespace ConsoleApp
             PickupPoint point = null;
             while (true)
             {
-                Console.WriteLine("1. Выбрать ПВЗ");
+                Console.WriteLine("\n1. Выбрать ПВЗ\n");
                 Console.WriteLine("Выбранный ПВЗ: ");
                 Console.WriteLine("Авдрес: " + (point?.Addres ?? "ПВЗ не выбран"));
                 Console.WriteLine("Телефон: " + (point?.PhoneNumber ?? "ПВЗ не выбран"));
