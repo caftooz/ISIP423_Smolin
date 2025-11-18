@@ -352,7 +352,7 @@ namespace ConsoleApp
                 {
                     int maxPageNumber = Convert.ToInt32(Math.Ceiling(cartItems.Count / 6f));
                     Console.Clear();
-                    Console.WriteLine("==КОРЗИНА==\n");
+                    Console.WriteLine("==КОРЗИНА==");
 
                     Console.WriteLine($"\n--СТРАНИЦА {pageNumber}--");
                     WriteCartItems(pageNumber, cartItems);
