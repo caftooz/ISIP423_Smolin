@@ -218,7 +218,123 @@ namespace ConsoleApp
         }
         private void OrdersHistoryPage()
         {
+            int pageNumber = 1;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("==ИСТОРИЯ ЗАКАЗОВ==");
 
+                List<Order> orders = Core.Context.Orders.Where(o => o.UserId == _user.UserId).ToList();
+                if (orders == null || orders.Count <= 0)
+                {
+                    Console.WriteLine("Вы не совершили ни одногозаказа!");
+                    Console.ReadKey(true);
+                    return;
+                }
+
+                int maxPageNumber = Convert.ToInt32(Math.Ceiling(orders.Count / 7f));
+
+                Console.WriteLine($"\n--СТРАНИЦА {pageNumber}--");
+                WriteOrders(pageNumber, orders);
+
+                if (pageNumber > 1)
+                    Console.WriteLine("\n8. Предыдущая страница");
+                else
+                    Console.WriteLine("\n");
+
+                if (pageNumber < maxPageNumber)
+                    Console.WriteLine("9. Следующая страница");
+                else
+                    Console.WriteLine("");
+                Console.WriteLine("\n0. Выход");
+
+                switch (Menu.Input(9, true))
+                {
+                    case Menu.Numbers.D1:
+                        OpenOrder(orders[0 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D2:
+                        OpenOrder(orders[1 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D3:
+                        OpenOrder(orders[2 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D4:
+                        OpenOrder(orders[3 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D5:
+                        OpenOrder(orders[4 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D6:
+                        OpenOrder(orders[5 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D7:
+                        OpenOrder(orders[6 + (pageNumber - 1) * 7]);
+                        break;
+                    case Menu.Numbers.D8:
+                        if (pageNumber > 1)
+                            pageNumber--;
+                        break;
+                    case Menu.Numbers.D9:
+                        if (pageNumber < maxPageNumber)
+                            pageNumber++;
+                        break;
+                    case Menu.Numbers.D0:
+                        return;
+
+                }
+            }
+        }
+        private void OpenOrder(Order order)
+        {
+            int pageNumber = 1;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"==ЗАКАЗ ОТ {order.CreatedAt}==");
+                Console.WriteLine($"Итоговая сумма заказа: {order.TotalAmount}");
+
+                List<OrderItem> items = Core.Context.OrderItems.Where(o => o.OrderId == order.OrderId).ToList();
+
+                int maxPageNumber = Convert.ToInt32(Math.Ceiling(items.Count / 7f));
+
+                Console.WriteLine($"\n--СТРАНИЦА {pageNumber}--");
+                WriteOrderItems(pageNumber, items);
+
+                if (pageNumber > 1)
+                    Console.WriteLine("\n8. Предыдущая страница");
+                else
+                    Console.WriteLine("\n");
+
+                if (pageNumber < maxPageNumber)
+                    Console.WriteLine("9. Следующая страница");
+                else
+                    Console.WriteLine("");
+                Console.WriteLine("\n0. Выход");
+
+                switch (Menu.Input(9, true))
+                {
+                    case Menu.Numbers.D1:
+                    case Menu.Numbers.D2:
+                    case Menu.Numbers.D3:
+                    case Menu.Numbers.D4:
+                    case Menu.Numbers.D5:
+                    case Menu.Numbers.D6:
+                    case Menu.Numbers.D7:
+                        break;
+                    case Menu.Numbers.D8:
+                        if (pageNumber > 1)
+                            pageNumber--;
+                        break;
+                    case Menu.Numbers.D9:
+                        if (pageNumber < maxPageNumber)
+                            pageNumber++;
+                        break;
+                    case Menu.Numbers.D0:
+                        return;
+
+                }
+            }
         }
         private void CartPage()
         {
@@ -292,7 +408,6 @@ namespace ConsoleApp
                 }
             }
         }
-
         private void SelectCartItem(CartItem item)
         {
             Product product = Core.Context.Products.First(p => p.ProductId == item.ProductId);
@@ -332,7 +447,6 @@ namespace ConsoleApp
             }
             
         }
-
         private void OrderPage(params List<CartItem> items)
         {
             int pageNumber = 1;
@@ -505,6 +619,33 @@ namespace ConsoleApp
                     CartItem item = cartItems[i + (page - 1) * 6];
                     Product product = Core.Context.Products.First(p => p.ProductId == item.ProductId);
                     Console.WriteLine($"{product.Name} - ({product.Price} руб. x {item.Quantity} шт.) = {product.Price * item.Quantity} руб.");
+                }
+                else
+                    Console.WriteLine("");
+            }
+        }
+        private void WriteOrders(int page, List<Order> orders)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i + (page - 1) * 6 < orders.Count)
+                {
+                    Order order = orders[i + (page - 1) * 7];
+                    Console.WriteLine($"{i + 1}. Заказ от {order.CreatedAt}. Сумма заказа: {order.TotalAmount} руб.");
+                }
+                else
+                    Console.WriteLine("");
+            }
+        }
+        private void WriteOrderItems(int page, List<OrderItem> items)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i + (page - 1) * 6 < items.Count)
+                {
+                    OrderItem item = items[i + (page - 1) * 7];
+                    Product product = Core.Context.Products.First(p => p.ProductId == item.ProductId);
+                    Console.WriteLine($"{product.Name} - ({item.UnitPrice} руб. x {item.Quantity} шт.) = {item.UnitPrice * item.Quantity} руб.");
                 }
                 else
                     Console.WriteLine("");
