@@ -296,7 +296,7 @@ namespace ConsoleApp
                 Console.WriteLine($"Итоговая сумма заказа: {order.TotalAmount}");
                 PickupPoint point = Core.Context.PickupPoints.First(p => p.PointId == order.PointId);
                 Console.WriteLine($"Адресс ПВЗ: {point.Addres}");
-                Console.WriteLine($"Адресс ПВЗ: {point.PhoneNumber}");
+                Console.WriteLine($"Телефон ПВЗ: {point.PhoneNumber}");
 
                 List<OrderItem> items = Core.Context.OrderItems.Where(o => o.OrderId == order.OrderId).ToList();
 
@@ -528,7 +528,9 @@ namespace ConsoleApp
                 {
                     Console.WriteLine("2. Оформить заказ");
                 }
-                switch (Menu.Input(1, true))
+
+                Console.WriteLine("\n0. Выход");
+                switch (Menu.Input(2, true))
                 {
                     case Menu.Numbers.D0:
                         return;
@@ -556,6 +558,7 @@ namespace ConsoleApp
                 CreatedAt = DateTime.Now
             };
             Core.Context.Orders.Add(newOrder);
+            Core.Context.SaveChanges();
 
             foreach (CartItem item in items)
             {
@@ -590,26 +593,26 @@ namespace ConsoleApp
                 i++;
             }
 
-            switch (Menu.Input(points.Count + 1))
+            switch (Menu.Input(points.Count))
             {
                 case Menu.Numbers.D1:
-                    return points[1];
+                    return points[0];
                 case Menu.Numbers.D2:
-                    return points[2];
+                    return points[1];
                 case Menu.Numbers.D3:
-                    return points[3];
+                    return points[2];
                 case Menu.Numbers.D4:
-                    return points[4];
+                    return points[3];
                 case Menu.Numbers.D5:
-                    return points[5];
+                    return points[4];
                 case Menu.Numbers.D6:
-                    return points[6];
+                    return points[5];
                 case Menu.Numbers.D7:
-                    return points[7];
+                    return points[6];
                 case Menu.Numbers.D8:
-                    return points[8];
+                    return points[7];
                 case Menu.Numbers.D9:
-                    return points[9];
+                    return points[8];
             }
 
             return null;
