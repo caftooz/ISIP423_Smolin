@@ -1,4 +1,5 @@
-﻿using ConsoleApp.DB;
+﻿using Azure;
+using ConsoleApp.DB;
 
 namespace ConsoleApp
 {
@@ -220,7 +221,132 @@ namespace ConsoleApp
         }
         private void CartPage()
         {
+            int pageNumber = 1;
+            while (true)
+            {
+                List<CartItem> cartItems = Core.Context.CartItems.Where(c => c.UserId == _user.UserId).ToList();
+                if (cartItems == null || cartItems.Count <= 0)
+                {
+                    Console.WriteLine("Корзина пуста");
+                    Console.ReadKey(true);
+                    return;
+                }
+                else
+                {
+                    int maxPageNumber = Convert.ToInt32(Math.Ceiling(cartItems.Count / 6f));
+                    Console.Clear();
+                    Console.WriteLine("==КОРЗИНА==\n");
 
+                    WriteCartItems(pageNumber, cartItems);
+
+                    if (pageNumber > 1)
+                        Console.WriteLine("\n7. Предыдущая страница");
+                    else
+                        Console.WriteLine("\n");
+
+                    if (pageNumber < maxPageNumber)
+                        Console.WriteLine("8. Следующая страница");
+                    else
+                        Console.WriteLine("");
+
+
+                    Console.WriteLine("\n9. Купить все товары");
+                    Console.WriteLine("\n0. Выход");
+
+                    switch (Menu.Input(9, true))
+                    {
+                        case Menu.Numbers.D1:
+                            SelectCartItem(cartItems[0 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D2:
+                            SelectCartItem(cartItems[1 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D3:
+                            SelectCartItem(cartItems[2 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D4:
+                            SelectCartItem(cartItems[3 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D5:
+                            SelectCartItem(cartItems[4 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D6:
+                            SelectCartItem(cartItems[5 + (pageNumber - 1) * 6]);
+                            break;
+                        case Menu.Numbers.D7:
+                            if (pageNumber > 1)
+                                pageNumber--;
+                            break;
+                        case Menu.Numbers.D8:
+                            if (pageNumber < maxPageNumber)
+                                pageNumber++;
+                            break;
+                        case Menu.Numbers.D9:
+                            break;
+                        case Menu.Numbers.D0:
+                            return;
+                    }
+                }
+            }
+        }
+
+        private void SelectCartItem(CartItem item)
+        {
+            Product product = Core.Context.Products.First(p => p.ProductId == item.ProductId);
+            Console.Clear();
+            Console.WriteLine("ТОВАР В КОРЗИНЕ\n");
+            Console.Write("Название: ");
+            Console.WriteLine(product.Name);
+            Console.Write("Цена: ");
+            Console.WriteLine(product.Price);
+            Console.Write("Количество: ");
+            Console.WriteLine(item.Quantity);
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\nИтоговая стоимость: " + item.Quantity * product.Price);
+            Console.ResetColor();
+
+            Console.WriteLine("\n1. Удалить из корзины");
+            Console.WriteLine("2. Купить");
+            Console.WriteLine("\n0. Выход");
+
+            switch (Menu.Input(2, true))
+            {
+                case Menu.Numbers.D0:
+                    return;
+                case Menu.Numbers.D1:
+                    {
+                        Console.Clear();
+                        Core.Context.CartItems.Remove(item);
+                        Core.Context.SaveChanges();
+                        Console.WriteLine("ТОВАР УСПЕШНО УДАЛЁН");
+                        Console.ReadKey(true);
+                        return;
+                    }
+                case Menu.Numbers.D2:
+                    OrderPage(item);
+                    break;
+            }
+            
+        }
+
+        private void OrderPage(params List<CartItem> items)
+        {
+
+        }
+
+        private void WriteCartItems(int page, List<CartItem> cartItems)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i + (page - 1) * 6 < cartItems.Count)
+                {
+                    CartItem item = cartItems[i + (page - 1) * 6];
+                    Console.WriteLine($"{i + 1}. {Core.Context.Products.First(p => p.ProductId == item.ProductId).Name} - {item.Quantity} шт.");
+                }
+                else
+                    Console.WriteLine("");
+            }
         }
         private void AddProductToCart(Product product)
         {
