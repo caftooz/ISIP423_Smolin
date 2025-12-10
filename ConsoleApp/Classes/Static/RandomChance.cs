@@ -1,4 +1,7 @@
-﻿namespace ConsoleApp;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp;
 
 public static class RandomChance
 {

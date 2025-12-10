@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System;
 
 namespace ConsoleApp;
 
@@ -91,7 +92,16 @@ public class RougelikeManager
     private void InitializePlayer()
     {
         _player = new(100, 20, 60);
+        _player.OnDie += GameOver;
     }
+
+    private void GameOver()
+    {
+        Console.Clear();
+        Console.WriteLine("Вы проиграли!");
+        throw new Exception("Тренеруйтесь");
+    }
+
     public void StartGame()
     {
         InitializePlayer();
@@ -103,6 +113,8 @@ public class RougelikeManager
 
     private void StartGameCycle()
     {
+        Console.Clear();
+        Console.WriteLine("Добро пожаловать в игру рогалик");
         int steps = 1;
         while (true)
         {
@@ -139,10 +151,27 @@ public class RougelikeManager
     {
         Enemy randomEnemy = RandomChance.GetRandomEnemy(_enemies);
         randomEnemy.Initialize();
+        randomEnemy.ActivateBonus(_player);
+        
+        bool isFighting = true;
+        randomEnemy.OnDie += StopFight;
+
+        while (isFighting)
+        {
+            
+        }
+        
+        void StopFight()
+        {
+            isFighting = false;
+            randomEnemy.OnDie -= StopFight;
+        }
     }
 
     private void OpenChest()
     {
+        Console.WriteLine("Вам попался суднук с добычей: ");
+        
         Item randomItem = RandomChance.GetRandomItem();
         randomItem.ShowInfo();
         switch (Menu.ShowMenu("Подобрать", "Выбросить"))

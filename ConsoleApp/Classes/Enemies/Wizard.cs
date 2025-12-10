@@ -1,6 +1,4 @@
-﻿using ConsoleApp.Enums;
-
-namespace ConsoleApp;
+﻿namespace ConsoleApp;
 
 public class Wizard : Enemy
 {

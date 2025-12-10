@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp.Enums;
+﻿using System;
+
+namespace ConsoleApp;
 
 [Flags]
 public enum PlayerEffects : byte

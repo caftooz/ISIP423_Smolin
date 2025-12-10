@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp;
+﻿using System;
+
+namespace ConsoleApp;
 
 public abstract class Enemy : IDamageable, IAttackable
 {
