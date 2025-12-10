@@ -13,7 +13,7 @@ public class Sword : Item
     
     public override void ShowInfo()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Меч с показателем урона: " + _attackDamage);
     }
 
     public override void UseItem(Player player)

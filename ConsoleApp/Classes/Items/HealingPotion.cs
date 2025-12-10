@@ -6,7 +6,7 @@ public class HealingPotion : Item
 {
     public override void ShowInfo()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Лечебное зелье (полностью востанавливает HP)");
     }
 
     public override void UseItem(Player player)

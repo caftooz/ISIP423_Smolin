@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Reflection.Metadata;
+using System.Threading.Channels;
 
 namespace ConsoleApp;
 
@@ -21,7 +23,7 @@ public class RougelikeManager
         //Goblin--------------------------------------------------------------------------------------------------------
         var goblinStats = new EnemyStats(150,20,5);
         int critDamageChance = 30;
-        float critDamageMultiply = 2;
+        float critDamageMultiply = 0.2f;
         
         Goblin baseGoblin = new Goblin(goblinStats, critDamageChance, critDamageMultiply);
         
@@ -113,11 +115,12 @@ public class RougelikeManager
 
     private void StartGameCycle()
     {
-        Console.Clear();
-        Console.WriteLine("Добро пожаловать в игру рогалик");
         int steps = 1;
         while (true)
         {
+            Console.Clear();
+            Console.WriteLine("Игра рогалик!!\n");
+            Console.WriteLine("Текущий ход: "+ steps + "\n");
             if (steps % 10 == 0)
             {
                 StartBossFight();
@@ -158,7 +161,11 @@ public class RougelikeManager
 
         while (isFighting)
         {
-            
+            Thread.Sleep(1000);
+            Console.Clear();
+            Console.WriteLine($"Вы сражаетесь против {GetEnemyClass(randomEnemy)}а");
+            Console.WriteLine($"Здоровье врага: {randomEnemy.HP}");
+            FightCycle(randomEnemy);
         }
         
         void StopFight()
@@ -168,12 +175,78 @@ public class RougelikeManager
         }
     }
 
+    private void FightCycle(Enemy enemy)
+    {
+        Console.WriteLine("Здоровье игрока: " + _player.HP);
+        Thread.Sleep(1000);
+        if ((_player.ActiveEffect & PlayerEffects.FreezeEffect) == PlayerEffects.FreezeEffect)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine("Вы были заморожены, поэтому пропускаете ход");
+            _player.RemoveEffect(PlayerEffects.FreezeEffect);
+            return;
+        }
+        switch (Menu.ShowMenu("Атака", "Защита"))
+        {
+            case Menu.MenuChoose.D1:
+                Attack(enemy);
+                break;
+            case  Menu.MenuChoose.D2:
+                Defense(enemy);
+                break;
+        }
+    }
+
+    private void Defense(Enemy enemy)
+    {
+        if (RandomChance.GetRandomChance(40))
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"Враг атакует на {enemy.AttackDamage} едениц урона");
+            Thread.Sleep(1000);
+            Console.WriteLine($"Игрок усппешно защитился");
+            _player.TakeDamage(0);
+        }
+        else
+        {
+            Thread.Sleep(1000);
+            int defensePercent = RandomChance.GetRandomNumber(70, 100);
+            Console.WriteLine($"Враг атакует на {enemy.AttackDamage} едениц урона");
+            Thread.Sleep(1000);
+            Console.WriteLine($"Игрок не смог защитится, но блокаирует атаку на {defensePercent} процентов");
+            _player.TakeDamage(enemy.AttackDamage * (100 - defensePercent) / 100);
+        }
+    }
+
+    private void Attack(Enemy enemy)
+    {
+        _player.Attack(enemy);
+        enemy.Attack(_player);
+        
+    }
+
+    private string GetEnemyClass(Enemy enemy)
+    {
+        if (enemy is Skeleton)
+            return "скелет";
+        if (enemy is Goblin)
+            return "гоблин";
+        if (enemy is Wizard)
+            return "маг";
+        else return "null";
+    }
+
     private void OpenChest()
     {
+        Console.WriteLine("Текущая защита брони: " + _player.Protection);
+        Console.WriteLine("Текущий урон меча: " + _player.AttackDamage);
+        Thread.Sleep(1000);
         Console.WriteLine("Вам попался суднук с добычей: ");
-        
+        Thread.Sleep(1000);
+
         Item randomItem = RandomChance.GetRandomItem();
         randomItem.ShowInfo();
+        Thread.Sleep(1000);
         switch (Menu.ShowMenu("Подобрать", "Выбросить"))
         {
             case Menu.MenuChoose.D1:

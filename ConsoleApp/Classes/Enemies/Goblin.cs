@@ -31,6 +31,7 @@ public class Goblin : Enemy
     {
         if (RandomChance.GetRandomChance(_critDamageChance))
         {
+            Console.WriteLine("Враг нанёс критический удар и игрок получает дополнительный урон");
             _player.TakeDamage(Convert.ToInt32(AttackDamage * _critDamageMultiply));
         }
     }

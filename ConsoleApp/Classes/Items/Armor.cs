@@ -13,7 +13,7 @@ public class Armor : Item
     
     public override void ShowInfo()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Броня с показателем защиты: " + _armorProtection);
     }
 
     public override void UseItem(Player player)

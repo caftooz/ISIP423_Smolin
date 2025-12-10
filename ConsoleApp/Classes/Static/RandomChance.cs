@@ -11,6 +11,11 @@ public static class RandomChance
         return _random.Next(1, 100) <= chance;
     }
 
+    public static int GetRandomNumber(int min, int max)
+    {
+        return _random.Next(min, max);
+    }
+
     public static Enemy GetRandomEnemy(List<Enemy> enemies)
     {
         return enemies[_random.Next(0, enemies.Count)];

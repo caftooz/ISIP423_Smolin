@@ -26,9 +26,12 @@ public abstract class Enemy : IDamageable, IAttackable
     
     public void TakeDamage(int damage)
     {
-        if (HP > damage)
+        int trueDamage = damage * (100 - Protection) / 100;
+        if (HP > trueDamage)
         {
-            HP -= damage;
+            Thread.Sleep(1000);
+            Console.WriteLine($"Враг получил {trueDamage} урона");
+            HP -= trueDamage;
         }
         else
         {
@@ -37,6 +40,8 @@ public abstract class Enemy : IDamageable, IAttackable
     }
     public void Attack(IDamageable target)
     {
+        Thread.Sleep(1000);
+        Console.WriteLine($"Враг атакует на {AttackDamage} едениц урона");
         target.TakeDamage(AttackDamage);
     }
 

@@ -26,6 +26,7 @@ public class Wizard : Enemy
     {
         if (RandomChance.GetRandomChance(_freezeChance))
         {
+            Console.WriteLine("Враг наложил на вас эффект заморозки");
             _player.ApplyEffect(PlayerEffects.FreezeEffect);
         }
     }

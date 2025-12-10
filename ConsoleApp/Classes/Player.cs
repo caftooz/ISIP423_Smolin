@@ -18,15 +18,19 @@ public sealed class Player : IDamageable, IAttackable
     {
         MaxHP = maxHP;
         HP = maxHP;
+        AttackDamage = attackDamage;
         Protection = protection;
         ActiveEffect = PlayerEffects.None;
     }
     
     public void TakeDamage(int damage)
     {
-        if (HP > damage)
+        int trueDamage = damage * (100 - Protection) / 100;
+        if (HP > trueDamage)
         {
-            HP -= damage;
+            Thread.Sleep(1000);
+            Console.WriteLine($"Игрок получет {trueDamage} урона");
+            HP -= trueDamage;
             OnTakeDamage?.Invoke();
         }
         else
@@ -36,6 +40,8 @@ public sealed class Player : IDamageable, IAttackable
     }
     public void Attack(IDamageable target)
     {
+        Thread.Sleep(1000);
+        Console.WriteLine($"Игрок атакует на {AttackDamage} едениц урона");
         target.TakeDamage(AttackDamage);
     }
     
