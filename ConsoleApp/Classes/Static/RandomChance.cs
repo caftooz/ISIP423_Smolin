@@ -8,7 +8,7 @@ public static class RandomChance
     private static Random _random = new Random();
     public static bool GetRandomChance(int chance)
     {
-        return _random.Next(1, 100) <= chance;
+        return _random.Next(1, 101) <= chance;
     }
 
     public static int GetRandomNumber(int min, int max)
@@ -28,13 +28,13 @@ public static class RandomChance
     
     public static Item GetRandomItem()
     {
-        switch (_random.Next(1, 3))
+        switch (_random.Next(0, 3))
         {
-            case 1:
+            case 0:
                 return new HealingPotion();
+            case 1:
+                return new Armor(_random.Next(10, 100));
             case 2:
-                return new Armor(_random.Next(70, 100));
-            case 3:
                 return new Sword(_random.Next(10, 40));
             default:
                 throw new Exception("Invalid random choice");

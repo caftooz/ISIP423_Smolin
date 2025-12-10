@@ -24,7 +24,7 @@ public abstract class Enemy : IDamageable, IAttackable
         Protection = _stats.Protection;
     }
     
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         int trueDamage = damage * (100 - Protection) / 100;
         if (HP > trueDamage)

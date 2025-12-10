@@ -15,29 +15,35 @@ public class RougelikeManager
     {
         //Initialize base enemies
         //Skeleton------------------------------------------------------------------------------------------------------
-        var skeletonStats = new EnemyStats(100,10,40);
-        int skeletonIgnoringProtectionPrecent = 10;
+        var skeletonStats = new EnemyStats(50,10,40);
+        int skeletonIgnoringProtectionPrecent = 50;
         
         Skeleton baseSkeleton = new Skeleton(skeletonStats, skeletonIgnoringProtectionPrecent);
         
         //Goblin--------------------------------------------------------------------------------------------------------
-        var goblinStats = new EnemyStats(150,20,5);
+        var goblinStats = new EnemyStats(70,20,5);
         int critDamageChance = 30;
         float critDamageMultiply = 0.2f;
         
         Goblin baseGoblin = new Goblin(goblinStats, critDamageChance, critDamageMultiply);
         
         //Wizard--------------------------------------------------------------------------------------------------------
-        var wizardStats = new EnemyStats(50,35,10);
+        var wizardStats = new EnemyStats(40,35,10);
         int freezeChance = 25;
         
         Wizard baseWizard = new Wizard(wizardStats, freezeChance);
+        
+        //Slime---------------------------------------------------------------------------------------------------------
+        var slimeStats = new EnemyStats(30,5,60);
+        
+        Slime baseSlime = new Slime(slimeStats);
         
         //Add enemies to list
         _enemies = new();
         _enemies.Add(baseSkeleton);
         _enemies.Add(baseGoblin);
         _enemies.Add(baseWizard);
+        _enemies.Add(baseSlime);
         
         //Initialize bosses
         //ВВГ (goblin)--------------------------------------------------------------------------------------------------
@@ -93,7 +99,7 @@ public class RougelikeManager
     }
     private void InitializePlayer()
     {
-        _player = new(100, 20, 60);
+        _player = new(100, 20, 30);
         _player.OnDie += GameOver;
     }
 
@@ -101,7 +107,9 @@ public class RougelikeManager
     {
         Console.Clear();
         Console.WriteLine("Вы проиграли!");
-        throw new Exception("Тренеруйтесь");
+
+        Console.ReadKey();
+        StartGame();
     }
 
     public void StartGame()
@@ -147,7 +155,29 @@ public class RougelikeManager
 
     private void StartBossFight()
     {
-        throw new NotImplementedException();
+        Boss randomBoss = RandomChance.GetRandomBosses(_bosses);
+        Enemy enemy = randomBoss.Enemy;
+        enemy.Initialize();
+        enemy.ActivateBonus(_player);
+        
+        bool isFighting = true;
+        enemy.OnDie += StopFight;
+
+        while (isFighting)
+        {
+            Thread.Sleep(1000);
+            Console.Clear();
+            Console.WriteLine($"Вы сражаетесь против босса {randomBoss.Name} - {GetEnemyClass(enemy)}");
+            Console.WriteLine($"Здоровье врага: {enemy.HP}");
+            FightCycle(enemy);
+            Thread.Sleep(1000);
+        }
+        
+        void StopFight()
+        {
+            isFighting = false;
+            enemy.OnDie -= StopFight;
+        }
     }
 
     private void StartFight()
@@ -166,6 +196,7 @@ public class RougelikeManager
             Console.WriteLine($"Вы сражаетесь против {GetEnemyClass(randomEnemy)}а");
             Console.WriteLine($"Здоровье врага: {randomEnemy.HP}");
             FightCycle(randomEnemy);
+            Thread.Sleep(1000);
         }
         
         void StopFight()
@@ -233,6 +264,8 @@ public class RougelikeManager
             return "гоблин";
         if (enemy is Wizard)
             return "маг";
+        if (enemy is Slime)
+            return "слизень";
         else return "null";
     }
 

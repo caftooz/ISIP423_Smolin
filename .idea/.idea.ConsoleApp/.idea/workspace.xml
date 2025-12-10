@@ -7,47 +7,64 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6707b10-855a-41c5-a821-17ae9b468d29" name="Changes" comment="" />
+    <list default="true" id="f6707b10-855a-41c5-a821-17ae9b468d29" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ConsoleApp/Classes/Enemies/Slime.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ConsoleApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ConsoleApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsoleApp/Classes/Enemy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ConsoleApp/Classes/Enemy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsoleApp/Classes/Static/RandomChance.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ConsoleApp/Classes/Static/RandomChance.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsoleApp/RougelikeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ConsoleApp/RougelikeManager.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "caftooz"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/caftooz/ISIP423_Smolin",
+    "accountId": "02490a49-81e0-45f7-930f-0fea759d57ab"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/Users/Александр/source/repos/ConsoleApp/ConsoleApp/Classes/Enemies/Wizard.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Александр/source/repos/ConsoleApp/ConsoleApp/Classes/Items/Sword.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Александр/source/repos/ConsoleApp/ConsoleApp/Classes/Items/Sword.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Александр/source/repos/ConsoleApp/ConsoleApp/RougelikeManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Александр/source/repos/ConsoleApp/ConsoleApp/RougelikeManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ConsoleApp/Classes/Enemies/Slime.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="36eBbCTKcdZMojrjCFvcDgkiBDC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.ConsoleApp.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "pr6",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.ConsoleApp.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pr6&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="ConsoleApp" type="DotNetProject" factoryName=".NET Project" temporary="true">
       <option name="EXE_PATH" value="$PROJECT_DIR$/ConsoleApp/bin/Debug/net10.0/ConsoleApp.exe" />
@@ -84,6 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1765357230292</updated>
       <workItem from="1765357241939" duration="3619000" />
+      <workItem from="1765382179245" duration="1202000" />
     </task>
     <servers />
   </component>
