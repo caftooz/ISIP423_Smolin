@@ -215,6 +215,7 @@ public class RougelikeManager
             Thread.Sleep(1000);
             Console.WriteLine("Вы были заморожены, поэтому пропускаете ход");
             _player.RemoveEffect(PlayerEffects.FreezeEffect);
+            enemy.Attack(_player);
             return;
         }
         switch (Menu.ShowMenu("Атака", "Защита"))
